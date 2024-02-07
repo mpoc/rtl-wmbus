@@ -68,7 +68,7 @@ static inline void STOP_ALARM(void)  {}
 #include <unistd.h>
 #include "net_support.h"
 
-static inline void START_ALARM(void) { alarm(2); }
+static inline void START_ALARM(void) { alarm(5); }
 static inline void STOP_ALARM(void)  { alarm(0); }
 
 static void sig_alarm_handler(int signo)
@@ -879,7 +879,7 @@ static void print_usage(const char *program_name)
     fprintf(stdout, "\t-V show version\n");
     fprintf(stdout, "\t-s receive S1 and T1/C1 datagrams simultaneously. rtl_sdr _MUST_ be set to 868.625MHz (-f 868.625M)\n");
     fprintf(stdout, "\t-p [T,S] to disable processing T1/C1 or S1 mode\n");
-    fprintf(stdout, "\t-f exit if flow of incoming data stops\n");
+    fprintf(stdout, "\t-f exit if incoming data stalled for 5 seconds\n");
     fprintf(stdout, "\t-h print this help\n");
 }
 
