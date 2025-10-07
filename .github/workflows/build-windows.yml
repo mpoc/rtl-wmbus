@@ -1,0 +1,57 @@
+name: Build rtl-wmbus on Windows
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    defaults:
+      run:
+        shell: msys2 {0}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          git
+          make
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-pkg-config
+    
+    - name: Build with make
+      run: make
+    
+    - name: List directory contents after build
+      run: |
+        echo "=== Current directory ==="
+        pwd
+        echo ""
+        echo "=== Files in current directory ==="
+        ls -lah
+        echo ""
+        echo "=== All .exe files ==="
+        find . -name "*.exe" -type f
+        echo ""
+        echo "=== All .dll files ==="
+        find . -name "*.dll" -type f
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: rtl-wmbus-windows
+        path: |
+          *.exe
+          *.dll
