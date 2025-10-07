@@ -24,6 +24,7 @@ jobs:
       with:
         msystem: MINGW64
         update: true
+        cache: true
         install: >-
           git
           make
@@ -42,16 +43,15 @@ jobs:
         echo "=== Files in current directory ==="
         ls -lah
         echo ""
-        echo "=== All .exe files ==="
-        find . -name "*.exe" -type f
-        echo ""
-        echo "=== All .dll files ==="
-        find . -name "*.dll" -type f
+        echo "=== Build directory contents ==="
+        if [ -d "build" ]; then
+          ls -lah build/
+        else
+          echo "No build directory found"
+        fi
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: rtl-wmbus-windows
-        path: |
-          *.exe
-          *.dll
+        path: build/
